@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [opdb-commits] r14 - trunk/client/libphish/src
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/opdb-commits/2006-June/index.html" >
+   <LINK REL="made" HREF="mailto:opdb-commits%40lists.berlios.de?Subject=Re%3A%20%5Bopdb-commits%5D%20r14%20-%20trunk/client/libphish/src&In-Reply-To=%3C200606061545.k56FjHFa027881%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[opdb-commits] r14 - trunk/client/libphish/src</H1>
+    <B>Meni Livne</B> 
+    <A HREF="mailto:opdb-commits%40lists.berlios.de?Subject=Re%3A%20%5Bopdb-commits%5D%20r14%20-%20trunk/client/libphish/src&In-Reply-To=%3C200606061545.k56FjHFa027881%40sheep.berlios.de%3E"
+       TITLE="[opdb-commits] r14 - trunk/client/libphish/src">livne at kde.org
+       </A><BR>
+    <I>Tue Jun  6 17:45:17 CEST 2006</I>
+    <P><UL>
+        
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#12">[ date ]</a>
+              <a href="thread.html#12">[ thread ]</a>
+              <a href="subject.html#12">[ subject ]</a>
+              <a href="author.html#12">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>SVN commit 14 by meni:
+
+FreeBSD compilation fixes.
+Patch by Aaron Dalton &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/opdb-commits">aaron at freebsd.org</A>&gt;.
+
+
+ M  +1 -0      trunk/client/libphish/src/phish_opdb_server.c  
+ M  +3 -1      trunk/client/libphish/src/phish_util_net.c  
+
+
+--- trunk/client/libphish/src/phish_opdb_server.c #13:14
+@@ -21,6 +21,7 @@
+ #define close closesocket
+ #include &lt;winsock2.h&gt;
+ #else
++#include &lt;sys/types.h&gt;
+ #include &lt;sys/socket.h&gt;
+ #include &lt;unistd.h&gt;
+ #endif
+--- trunk/client/libphish/src/phish_util_net.c #13:14
+@@ -27,6 +27,8 @@
+ #define snprintf _snprintf
+ #define ssize_t int
+ #else
++#include &lt;sys/types.h&gt;
++#include &lt;sys/socket.h&gt;
+ #include &lt;netdb.h&gt;
+ #include &lt;netinet/in.h&gt;
+ #include &lt;arpa/inet.h&gt;
+@@ -72,7 +74,7 @@
+   h-&gt;ent = NULL;
+   h-&gt;buf = NULL;
+   
+-#ifdef WIN32
++#if defined(WIN32) || defined(FreeBSD)
+ 
+   h-&gt;ent = gethostbyname(name);
+   
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#12">[ date ]</a>
+              <a href="thread.html#12">[ thread ]</a>
+              <a href="subject.html#12">[ subject ]</a>
+              <a href="author.html#12">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/opdb-commits">More information about the opdb-commits
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,46 @@
+From livne at kde.org  Tue Jun  6 17:45:17 2006
+From: livne at kde.org (Meni Livne)
+Date: Tue, 6 Jun 2006 17:45:17 +0200
+Subject: [opdb-commits] r14 - trunk/client/libphish/src
+Message-ID: <200606061545.k56FjHFa027881@sheep.berlios.de>
+
+SVN commit 14 by meni:
+
+FreeBSD compilation fixes.
+Patch by Aaron Dalton <aaron at freebsd.org>.
+
+
+ M  +1 -0      trunk/client/libphish/src/phish_opdb_server.c  
+ M  +3 -1      trunk/client/libphish/src/phish_util_net.c  
+
+
+--- trunk/client/libphish/src/phish_opdb_server.c #13:14
+@@ -21,6 +21,7 @@
+ #define close closesocket
+ #include <winsock2.h>
+ #else
++#include <sys/types.h>
+ #include <sys/socket.h>
+ #include <unistd.h>
+ #endif
+--- trunk/client/libphish/src/phish_util_net.c #13:14
+@@ -27,6 +27,8 @@
+ #define snprintf _snprintf
+ #define ssize_t int
+ #else
++#include <sys/types.h>
++#include <sys/socket.h>
+ #include <netdb.h>
+ #include <netinet/in.h>
+ #include <arpa/inet.h>
+@@ -72,7 +74,7 @@
+   h->ent = NULL;
+   h->buf = NULL;
+   
+-#ifdef WIN32
++#if defined(WIN32) || defined(FreeBSD)
+ 
+   h->ent = gethostbyname(name);
+   
+
+

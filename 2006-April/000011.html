@@ -1,0 +1,211 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [opdb-commits] r13 - in trunk/client: karpion libphish
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/opdb-commits/2006-April/index.html" >
+   <LINK REL="made" HREF="mailto:opdb-commits%40lists.berlios.de?Subject=Re%3A%20%5Bopdb-commits%5D%20r13%20-%20in%20trunk/client%3A%20karpion%20libphish&In-Reply-To=%3C200604121319.k3CDJQ6i020739%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000010.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[opdb-commits] r13 - in trunk/client: karpion libphish</H1>
+    <B>Meni Livne</B> 
+    <A HREF="mailto:opdb-commits%40lists.berlios.de?Subject=Re%3A%20%5Bopdb-commits%5D%20r13%20-%20in%20trunk/client%3A%20karpion%20libphish&In-Reply-To=%3C200604121319.k3CDJQ6i020739%40sheep.berlios.de%3E"
+       TITLE="[opdb-commits] r13 - in trunk/client: karpion libphish">livne at kde.org
+       </A><BR>
+    <I>Wed Apr 12 15:19:26 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000010.html">[opdb-commits] r12 - tags/karpion/0.1.0
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#11">[ date ]</a>
+              <a href="thread.html#11">[ thread ]</a>
+              <a href="subject.html#11">[ subject ]</a>
+              <a href="author.html#11">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>SVN commit 13 by meni:
+
+Added .spec files to generate RPM packages for libphish and karpion,
+courtesy of Diego Iastrubni &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/opdb-commits">elcuco at kde.org</A>&gt;.
+
+
+ A             karpion/karpion.spec  
+ A             libphish/libphish.spec  
+
+
+--- trunk/client/karpion/karpion.spec #12:13
+
+Name: karpion
+Summary: Anti-Phishing toolbar for Konqueror
+Version: 0.1.0
+Release: 1cuco
+License: GPL 2
+Group: Network
+URL: <A HREF="http://www.kde-apps.org/content/show.php?content=29398">http://www.kde-apps.org/content/show.php?content=29398</A>
+Packager: Diego Iastrubni &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/opdb-commits">elcuco at kde.org</A>&gt;
+Requires: libphish
+Source0: %{name}-%{version}.tar.bz2
+
+Buildroot: %{_tmppath}/%{name}-%{version}-%{release}-root
+
+%description
+Konqueror Anti-Phishing Toolbar (a.k.a. Karpion) is an addon for the Konqueror
+browser which utilises the Open Phishing Database to provide the user with
+information and tools that help protect against phishing.
+
+Note that Konqueror Anti-Phishing Toolbar requires libphish, a cross-platform
+library to interact with the Open Phishing Database. Libphish can be obtained
+at the Open Phishing Database website: <A HREF="http://opdb.berlios.de/">http://opdb.berlios.de/</A>
+ 
+
+%prep 
+%setup
+#cd mtaskbar
+. /etc/opt/kde3/common_options
+update_admin --no-unsermake
+
+#----------------------------
+%build 
+#cd mtaskbar
+. /etc/opt/kde3/common_options
+%configure --prefix=/opt/kde3
+
+# this fails to compile, why?
+#./configure $configkde
+make 
+
+#----------------------------
+%install 
+rm -fr %{buildroot}
+#cd mtaskbar
+. /etc/opt/kde3/common_options
+%makeinstall libdir=/opt/kde3/lib
+
+
+#----------------------------
+%clean 
+rm -fr %{buildroot}
+
+
+#----------------------------
+%post 
+#post install script
+
+#----------------------------
+%preun 
+#pre uninstall script
+
+#----------------------------
+%postun 
+#post uninstall script
+
+#----------------------------
+%files 
+%defattr(-,root,root) 
+/
+
+%changelog 
+* Wed Apr 12 2006 Diego Iastrubni &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/opdb-commits">elcuco at kde.org</A>&gt;
+- First version
+--- trunk/client/libphish/libphish.spec #12:13
+
+Name: libphish
+Summary: A cross-platform library to interact with the Open Phishing Database
+Version: 0.1.0
+Release: 1cuco
+License: GPL V2
+Group: Network
+URL: <A HREF="http://opdb.berlios.de/">http://opdb.berlios.de/</A>
+Packager: Diego Iastrubni &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/opdb-commits">elcuco at kde.org</A>&gt;
+Requires: expat
+Source0: %{name}-%{version}.tar.bz2
+
+Buildroot: %{_tmppath}/%{name}-%{version}-%{release}-root
+
+%description
+Libphish is a cross-platform library to interact with the Open Phishing
+Database. It provides a consistent API which browsers and other programs can
+use to verify the safety and risk level of URLs.
+
+Libphish is part of the Open Phishing Database project, an effort to create
+and maintain and open database of phishing sites, in addition to providing
+extensions to browsers that utilise the database. Libphish is used by the
+FirePhish anti-phishing toolbar for Firefox and the Konqueror Anti-Phishing 
+Toolbar.
+
+Note that libphish requires the expat XML parsing library. 
+
+
+%prep 
+%setup
+
+#----------------------------
+%build 
+%configure
+make 
+
+#----------------------------
+%install 
+rm -fr %{buildroot}
+%makeinstall 
+
+
+#----------------------------
+%clean 
+rm -fr %{buildroot}
+
+
+#----------------------------
+%post 
+#post install script
+
+#----------------------------
+%preun 
+#pre uninstall script
+
+#----------------------------
+%postun 
+#post uninstall script
+
+#----------------------------
+%files 
+%defattr(-,root,root) 
+/
+
+%changelog 
+* Wed Apr 12 2006 Diego Iastrubni &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/opdb-commits">elcuco at kde.org</A>&gt;
+- First version
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000010.html">[opdb-commits] r12 - tags/karpion/0.1.0
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#11">[ date ]</a>
+              <a href="thread.html#11">[ thread ]</a>
+              <a href="subject.html#11">[ subject ]</a>
+              <a href="author.html#11">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/opdb-commits">More information about the opdb-commits
+mailing list</a><br>
+</body></html>
